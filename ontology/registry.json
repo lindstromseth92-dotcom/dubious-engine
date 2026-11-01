@@ -1,0 +1,11 @@
+{
+  "tiers": {
+    "primary":    ["sec.gov", "courtlistener.com", "federalregister.gov", "data.gov", "pubmed.ncbi.nlm.nih.gov", "arxiv.org", "bls.gov", "census.gov", "cdc.gov", "who.int", "congress.gov", "gao.gov"],
+    "secondary":  ["reuters.com", "apnews.com", "bbc.com", "nytimes.com", "wsj.com", "washingtonpost.com", "ft.com", "bloomberg.com", "npr.org", "theguardian.com", "economist.com"],
+    "tertiary":   ["wikipedia.org", "britannica.com"],
+    "commentary": ["substack.com", "medium.com", "youtube.com", "x.com", "twitter.com", "reddit.com", "facebook.com", "tiktok.com"],
+    "disinfo":    ["rt.com", "sputniknews.com", "presstv.ir", "globaltimes.cn"]
+  },
+  "tier_scores": {"primary": 0.05, "secondary": 0.2, "tertiary": 0.4, "unknown": 0.5, "commentary": 0.6, "none": 0.7, "disinfo": 0.95},
+  "stale_years": 5
+}
