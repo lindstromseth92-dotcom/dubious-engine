@@ -1,5 +1,7 @@
+import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from google.genai import errors as genai_errors
 from pydantic import BaseModel, Field
 
 from app import db
@@ -20,8 +22,8 @@ class FeedbackRequest(BaseModel):
     note: str | None = None
 
 
-@app.get("/healthz")
-def healthz():
+@app.get("/health")
+def health():
     return {"ok": True}
 
 
@@ -29,8 +31,8 @@ def healthz():
 def check(req: CheckRequest):
     try:
         result = run(req.source)
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
+    except (httpx.HTTPError, genai_errors.APIError) as e:
+        raise HTTPException(status_code=502, detail=str(e)) from e
     result["check_id"] = db.save_check(result)
     return result
 
