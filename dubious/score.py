@@ -6,7 +6,7 @@ from pathlib import Path
 from .resolve import chain, domain
 
 REG = json.loads((Path(__file__).parent.parent / "ontology" / "registry.json").read_text())
-HEARSAY = re.compile(r"\b(sources?|officials?|experts?|people familiar|insiders?|critics)\b", re.I)
+HEARSAY = re.compile(r"\b(sources?|officials?|experts?|people familiar|insiders?|critics)\b", re.IGNORECASE)
 
 
 def tier_of(dom: str) -> str:

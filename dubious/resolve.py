@@ -1,9 +1,11 @@
+import logging
 from urllib.parse import urlparse
+
 import httpx
 from bs4 import BeautifulSoup
 
 UA = {"User-Agent": "dubious-engine/0.1 (+https://github.com/<you>/dubious-engine)"}
-
+log = logging.getLogger(__name__)
 
 def fetch(url: str, timeout: float = 10) -> tuple[str, list[str]]:
     """Return (visible text, outbound http links) for a page."""
@@ -21,7 +23,7 @@ def fetch(url: str, timeout: float = 10) -> tuple[str, list[str]]:
 
 def domain(url: str) -> str:
     host = urlparse(url).netloc.lower()
-    return host[4:] if host.startswith("www.") else host
+    return host.removeprefix("www.")
 
 
 def chain(url: str) -> list[str]:
@@ -30,6 +32,7 @@ def chain(url: str) -> list[str]:
     try:
         _, links = fetch(url)
         out += sorted({domain(l) for l in links} - {out[0]})[:20]
-    except Exception:
-        pass  # dead link: chain ends here, and the scorer treats that as CHAIN-TERM:none
+    except httpx.HTTPError as e:
+           log.warning("chain: could not fetch %s: %s", url, e)
+    # dead link: chain ends here, and the scorer treats that as CHAIN-TERM:none
     return out
