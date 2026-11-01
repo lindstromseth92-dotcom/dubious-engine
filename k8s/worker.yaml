@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: dubious-engine:dev
+          imagePullPolicy: IfNotPresent
+          command: ["/app/.venv/bin/python", "worker.py"]     
+          env:
+            - name: REDIS_URL
+              value: redis://redis:6379
+          envFrom:                          
+            - secretRef:                    
+                name: gemini                
